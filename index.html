@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f5f7fa;
+      background: linear-gradient(to bottom, #f8fafc, #eef2ff);
       margin: 0;
       padding: 0;
     }
@@ -77,6 +77,21 @@
       margin-top: 20px;
       border-radius: 10px;
     }
+
+    .trust {
+      background:#eef2ff;
+      padding:10px;
+      border-radius:8px;
+      font-size:14px;
+      margin-top:10px;
+    }
+
+    .how {
+      font-size:14px;
+      color:#555;
+      margin-top:10px;
+    }
+
   </style>
 </head>
 
@@ -87,14 +102,27 @@
 <h1>¿Por qué no estás avanzando en aplicaciones a ONGs?</h1>
 
 <p>
-Analiza tu perfil frente a una vacante real, evalúa tus posibilidades y mejora tu aplicación en minutos.
+Analiza tu CV frente a una vacante real, evalúa tus posibilidades y mejora tu aplicación en minutos.
 </p>
+
+<div class="trust">
+Herramienta en fase piloto. Diseñada para ayudarte a mejorar aplicaciones a ONGs con análisis basado en criterios reales de selección.
+</div>
 
 <div class="features">
   <span>✔ Diagnóstico de factibilidad</span>
   <span>✔ CV optimizado</span>
   <span>✔ Cover letter lista</span>
 </div>
+
+<div class="how">
+¿Cómo funciona?
+<br>1. Analizamos tu CV frente a la vacante
+<br>2. Detectamos brechas reales
+<br>3. Generamos una versión optimizada lista para aplicar
+</div>
+
+<hr>
 
 <textarea id="cv" placeholder="Pega tu CV aquí..."></textarea>
 
@@ -150,7 +178,13 @@ function runAnalysis(){
     <br>✔ Aplicaciones adaptadas a cada vacante
     </p>
 
-    <button>Optimizar mi aplicación – $1</button>
+    <button>
+    Ver CV optimizado y cover letter – $1
+    </button>
+
+    <p style="font-size:12px; color:#777; margin-top:10px;">
+    Pago único. Sin suscripción. Acceso completo por 48h.
+    </p>
 
     </div>
 

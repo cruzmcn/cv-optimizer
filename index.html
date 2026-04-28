@@ -128,7 +128,11 @@ Herramienta en fase piloto. Diseñada para ayudarte a mejorar aplicaciones a ONG
 
 <textarea id="job" placeholder="Pega la vacante aquí..."></textarea>
 
-<input id="impact" placeholder="Impacto (ej: 200 personas)">
+<textarea id="impact" placeholder="¿Qué impacto has tenido? (ej: beneficié a 200 personas, mejoré procesos, reduje tiempos)"></textarea>
+
+<input id="role" placeholder="¿Cuál fue tu rol principal? (ej: coordinación, ejecución, análisis)">
+
+<input id="tools" placeholder="¿Usaste métricas, reportes o herramientas? (opcional)">
 
 <button onclick="runAnalysis()">Analizar mi aplicación</button>
 
@@ -138,6 +142,10 @@ Herramienta en fase piloto. Diseñada para ayudarte a mejorar aplicaciones a ONG
 
 <script>
 function runAnalysis(){
+
+  const impact = document.getElementById("impact").value;
+  const role = document.getElementById("role").value;
+  const tools = document.getElementById("tools").value;
 
   document.getElementById("result").innerHTML = "<p>Analizando tu perfil...</p>";
 
@@ -154,16 +162,16 @@ function runAnalysis(){
     </b></p>
 
     <ul>
-      <li>❌ No hay resultados medibles</li>
-      <li>❌ Experiencia muy general</li>
-      <li>❌ Poca conexión con el rol</li>
+      <li>❌ No hay resultados medibles claros</li>
+      <li>❌ Tu rol no está bien definido</li>
+      <li>❌ Falta evidencia de uso de métricas o herramientas</li>
     </ul>
 
     <p><b>Ejemplo de mejora:</b></p>
 
     <p><b>ANTES:</b> Apoyé en proyectos comunitarios</p>
 
-    <p><b>DESPUÉS:</b> Apoyé la implementación de proyectos que beneficiaron a más de 200 personas.</p>
+    <p><b>DESPUÉS:</b> Apoyé la implementación de proyectos que beneficiaron a más de 200 personas, contribuyendo a la coordinación y seguimiento de resultados.</p>
 
     </div>
 

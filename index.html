@@ -3,43 +3,122 @@
 <head>
   <meta charset="UTF-8">
   <title>Optimiza tu aplicación a ONGs</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #555;
+    }
+
+    .features {
+      margin: 15px 0;
+    }
+
+    .features span {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    textarea, input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #1e4fd1;
+    }
+
+    .result {
+      margin-top: 20px;
+      background: #f9fafb;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .paywall {
+      background: #fff3cd;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+  </style>
 </head>
 
-<body style="font-family:sans-serif; max-width:700px; margin:auto; padding:20px;">
+<body>
 
-<h2>¿Por qué no estás avanzando en aplicaciones a ONGs?</h2>
+<div class="container">
+
+<h1>¿Por qué no estás avanzando en aplicaciones a ONGs?</h1>
 
 <p>
-Analiza tu CV frente a una vacante real, evalúa tus posibilidades y mejora tu aplicación en minutos.
+Analiza tu perfil frente a una vacante real, evalúa tus posibilidades y mejora tu aplicación en minutos.
 </p>
 
-<p><b>✔ Diagnóstico de factibilidad</b></p>
-<p><b>✔ CV optimizado</b></p>
-<p><b>✔ Cover letter lista</b></p>
+<div class="features">
+  <span>✔ Diagnóstico de factibilidad</span>
+  <span>✔ CV optimizado</span>
+  <span>✔ Cover letter lista</span>
+</div>
 
-<hr>
+<textarea id="cv" placeholder="Pega tu CV aquí..."></textarea>
 
-<textarea id="cv" placeholder="Pega tu CV aquí..." style="width:100%;height:120px;"></textarea>
+<textarea id="job" placeholder="Pega la vacante aquí..."></textarea>
 
-<textarea id="job" placeholder="Pega la vacante aquí..." style="width:100%;height:100px;margin-top:10px;"></textarea>
+<input id="impact" placeholder="Impacto (ej: 200 personas)">
 
-<input id="impact" placeholder="Impacto (ej: 200 personas)" style="width:100%;margin-top:10px;">
+<button onclick="runAnalysis()">Analizar mi aplicación</button>
 
-<button onclick="runAnalysis()" style="margin-top:10px; padding:10px;">
-Analizar mi aplicación
-</button>
+<div id="result"></div>
 
-<div id="result" style="margin-top:20px;"></div>
+</div>
 
 <script>
 function runAnalysis(){
 
-  document.getElementById("result").innerHTML = "Analizando tu perfil...";
+  document.getElementById("result").innerHTML = "<p>Analizando tu perfil...</p>";
 
   setTimeout(() => {
 
     document.getElementById("result").innerHTML = `
-    
+
+    <div class="result">
+
     <h3>🔍 Diagnóstico</h3>
 
     <p><b>
@@ -48,17 +127,19 @@ function runAnalysis(){
 
     <ul>
       <li>❌ No hay resultados medibles</li>
-      <li>❌ Experiencia descrita de forma general</li>
-      <li>❌ Poca conexión con el rol específico</li>
+      <li>❌ Experiencia muy general</li>
+      <li>❌ Poca conexión con el rol</li>
     </ul>
 
-    <p><strong>Ejemplo de mejora:</strong></p>
+    <p><b>Ejemplo de mejora:</b></p>
 
     <p><b>ANTES:</b> Apoyé en proyectos comunitarios</p>
 
-    <p><b>DESPUÉS:</b> Apoyé la implementación de proyectos comunitarios que beneficiaron a más de 200 personas, contribuyendo a la coordinación y seguimiento de actividades clave.</p>
+    <p><b>DESPUÉS:</b> Apoyé la implementación de proyectos que beneficiaron a más de 200 personas.</p>
 
-    <hr>
+    </div>
+
+    <div class="paywall">
 
     <p><b>🔒 Tu perfil puede mejorar significativamente.</b></p>
 
@@ -69,11 +150,9 @@ function runAnalysis(){
     <br>✔ Aplicaciones adaptadas a cada vacante
     </p>
 
-    <br>
+    <button>Optimizar mi aplicación – $1</button>
 
-    <button style="padding:10px;">
-    Optimizar mi aplicación – $1
-    </button>
+    </div>
 
     `;
 

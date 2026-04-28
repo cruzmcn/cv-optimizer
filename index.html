@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Optimiza tu aplicación a ONGs</title>
+</head>
+
+<body style="font-family:sans-serif; max-width:700px; margin:auto; padding:20px;">
+
+<h2>¿Por qué no estás avanzando en aplicaciones a ONGs?</h2>
+
+<p>
+Analiza tu CV frente a una vacante real, evalúa tus posibilidades y mejora tu aplicación en minutos.
+</p>
+
+<p><b>✔ Diagnóstico de factibilidad</b></p>
+<p><b>✔ CV optimizado</b></p>
+<p><b>✔ Cover letter lista</b></p>
+
+<hr>
+
+<textarea id="cv" placeholder="Pega tu CV aquí..." style="width:100%;height:120px;"></textarea>
+
+<textarea id="job" placeholder="Pega la vacante aquí..." style="width:100%;height:100px;margin-top:10px;"></textarea>
+
+<input id="impact" placeholder="Impacto (ej: 200 personas)" style="width:100%;margin-top:10px;">
+
+<button onclick="runAnalysis()" style="margin-top:10px; padding:10px;">
+Analizar mi aplicación
+</button>
+
+<div id="result" style="margin-top:20px;"></div>
+
+<script>
+function runAnalysis(){
+
+  document.getElementById("result").innerHTML = "Analizando tu perfil...";
+
+  setTimeout(() => {
+
+    document.getElementById("result").innerHTML = `
+    
+    <h3>🔍 Diagnóstico</h3>
+
+    <p><b>
+    Tu perfil no está mostrando impacto ni alineación clara con la vacante, lo que reduce significativamente tus probabilidades de avanzar.
+    </b></p>
+
+    <ul>
+      <li>❌ No hay resultados medibles</li>
+      <li>❌ Experiencia descrita de forma general</li>
+      <li>❌ Poca conexión con el rol específico</li>
+    </ul>
+
+    <p><strong>Ejemplo de mejora:</strong></p>
+
+    <p><b>ANTES:</b> Apoyé en proyectos comunitarios</p>
+
+    <p><b>DESPUÉS:</b> Apoyé la implementación de proyectos comunitarios que beneficiaron a más de 200 personas, contribuyendo a la coordinación y seguimiento de actividades clave.</p>
+
+    <hr>
+
+    <p><b>🔒 Tu perfil puede mejorar significativamente.</b></p>
+
+    <p>
+    Desbloquea:
+    <br>✔ CV optimizado completo
+    <br>✔ Cover letter lista
+    <br>✔ Aplicaciones adaptadas a cada vacante
+    </p>
+
+    <br>
+
+    <button style="padding:10px;">
+    Optimizar mi aplicación – $1
+    </button>
+
+    `;
+
+  }, 1500);
+}
+</script>
+
+</body>
+</html>

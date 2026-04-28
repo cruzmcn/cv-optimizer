@@ -96,7 +96,6 @@
       font-weight:bold;
       margin-top:10px;
     }
-
   </style>
 </head>
 
@@ -143,64 +142,64 @@ Herramienta en fase piloto. Diseñada para ayudarte a mejorar aplicaciones con c
 </div>
 
 <script>
-function runAnalysis(){
+async function runAnalysis(){
+
+  const cv = document.getElementById("cv").value;
+  const job = document.getElementById("job").value;
+  const impact = document.getElementById("impact").value;
+  const role = document.getElementById("role").value;
+  const tools = document.getElementById("tools").value;
 
   document.getElementById("result").innerHTML = "<p>Analizando tu perfil...</p>";
 
-  setTimeout(() => {
+  try {
+
+    const response = await fetch("https://hook.us2.make.com/wa5vw1jfga23bsqd2is1mhqnn3pijfcr", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        cv, job, impact, role, tools
+      })
+    });
+
+    const data = await response.json();
 
     document.getElementById("result").innerHTML = `
+      <div class="result">
+        <h3>🔍 Diagnóstico</h3>
+        <p>${data.result || "No se pudo generar el análisis."}</p>
+      </div>
 
-    <div class="result">
+      <div class="paywall">
+        <p><b>🔒 Tu perfil puede mejorar significativamente.</b></p>
 
-    <h3>🔍 Diagnóstico</h3>
+        <p>
+        Desbloquea:
+        <br>✔ CV optimizado completo
+        <br>✔ Cover letter lista
+        <br>✔ Aplicaciones adaptadas a cada vacante
+        </p>
 
-    <p><b>
-    Tu perfil no está mostrando impacto ni alineación clara con la vacante, lo que reduce significativamente tus probabilidades de avanzar.
-    </b></p>
+        <button>
+        Mejorar mi aplicación ahora – $1
+        </button>
 
-    <p class="alert">
-    Este tipo de perfil suele quedar fuera en las primeras etapas de selección.
-    </p>
-
-    <ul>
-      <li>❌ No hay resultados medibles claros</li>
-      <li>❌ Tu rol no está bien definido</li>
-      <li>❌ Falta evidencia de uso de métricas o herramientas</li>
-    </ul>
-
-    <p><b>Ejemplo de mejora:</b></p>
-
-    <p><b>ANTES:</b> Apoyé en proyectos comunitarios</p>
-
-    <p><b>DESPUÉS:</b> Apoyé la implementación de proyectos que beneficiaron a más de 200 personas, contribuyendo a la coordinación y seguimiento de resultados.</p>
-
-    </div>
-
-    <div class="paywall">
-
-    <p><b>🔒 Tu perfil puede mejorar significativamente.</b></p>
-
-    <p>
-    Desbloquea:
-    <br>✔ CV optimizado completo
-    <br>✔ Cover letter lista
-    <br>✔ Aplicaciones adaptadas a cada vacante
-    </p>
-
-    <button>
-    Mejorar mi aplicación ahora – $1
-    </button>
-
-    <p style="font-size:12px; color:#777; margin-top:10px;">
-    Pago único. Sin suscripción. Acceso completo por 48h.
-    </p>
-
-    </div>
-
+        <p style="font-size:12px; color:#777; margin-top:10px;">
+        Pago único. Sin suscripción. Acceso completo por 48h.
+        </p>
+      </div>
     `;
 
-  }, 1500);
+  } catch (error) {
+
+    document.getElementById("result").innerHTML = `
+      <p style="color:red;">Error conectando con el servidor. Revisa configuración.</p>
+    `;
+
+    console.error(error);
+  }
 }
 </script>
 

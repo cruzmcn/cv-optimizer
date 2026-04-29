@@ -34,9 +34,7 @@ body {
   box-shadow:0 10px 30px rgba(0,0,0,0.08);
 }
 
-h1 {
-  font-size:32px;
-}
+h1 { font-size:32px; }
 
 .badge {
   background:#e0e7ff;
@@ -53,17 +51,12 @@ h1 {
   gap:10px;
 }
 
-.feature div {
-  font-size:14px;
-}
-
 input, textarea {
   width:100%;
   padding:14px;
   margin-top:12px;
   border-radius:10px;
   border:1px solid #ddd;
-  font-size:14px;
 }
 
 .upload {
@@ -87,10 +80,6 @@ button {
   cursor:pointer;
 }
 
-button:hover {
-  opacity:0.9;
-}
-
 .result {
   margin-top:20px;
   padding:20px;
@@ -111,40 +100,22 @@ button:hover {
 
 <div class="wrapper">
 
-<!-- LEFT -->
 <div class="sidebar">
-
-<div class="badge">Herramienta en fase piloto</div>
-
+<div class="badge">Fase piloto</div>
 <h1>Optimiza tu aplicación a ONGs</h1>
+<p>Analiza tu CV y mejora tus probabilidades.</p>
 
-<p>Analizamos tu CV frente a vacantes reales para aumentar tus probabilidades.</p>
-
-<div class="feature">
-<div>✔</div>
-<div>Diagnóstico personalizado</div>
+<div class="feature">✔ Diagnóstico real</div>
+<div class="feature">✔ CV optimizado</div>
+<div class="feature">✔ Cover letter</div>
 </div>
 
-<div class="feature">
-<div>✔</div>
-<div>CV optimizado</div>
-</div>
-
-<div class="feature">
-<div>✔</div>
-<div>Cover letter lista</div>
-</div>
-
-</div>
-
-<!-- RIGHT -->
 <div class="main">
 
-<h3>1. Tu CV</h3>
+<h3>1. CV</h3>
 
 <div class="upload" onclick="document.getElementById('file').click()">
-Arrastra tu CV o haz clic para subir
-<br><small>PDF, DOCX, TXT</small>
+Sube tu CV o haz clic
 </div>
 
 <input type="file" id="file">
@@ -155,20 +126,19 @@ Arrastra tu CV o haz clic para subir
 <textarea id="job" placeholder="Pega la vacante..."></textarea>
 
 <h3>3. Impacto</h3>
-<input id="impact" placeholder="Ej: beneficié a 200 personas">
+<input id="impact">
 
 <h3>4. Rol</h3>
-<input id="role" placeholder="Ej: coordinación">
+<input id="role">
 
 <h3>5. Herramientas</h3>
-<input id="tools" placeholder="Opcional">
+<input id="tools">
 
 <button onclick="runAnalysis()">Analizar mi aplicación</button>
 
 <div id="result"></div>
 
 </div>
-
 </div>
 
 <script>
@@ -191,30 +161,31 @@ async function runAnalysis(){
   document.getElementById("result").innerHTML = "Analizando...";
 
   try {
-    const res = await fetch("https://hook.us2.make.com/wa5vw1jfga23bsqd2is1mhqnn3pijfcr", {
+
+    const response = await fetch("https://hook.us2.make.com/wa5vw1jfga23bsqd2is1mhqnn3pijfcr", {
       method:"POST",
-      headers:{"Content-Type":"application/json"},
+      headers:{ "Content-Type":"application/json" },
       body:JSON.stringify({cv,job,impact,role,tools})
     });
 
-    const data = await res.json();
+    const text = await response.text();
 
     document.getElementById("result").innerHTML = `
       <div class="result">
-        <pre>${data.result}</pre>
-        <p style="color:#b91c1c;font-weight:bold;">
+        <pre>${text}</pre>
+        <p style="color:red;font-weight:bold;">
         Este perfil puede quedar fuera si no se optimiza.
         </p>
       </div>
 
       <div class="paywall">
-        <p><b>Mejora tu aplicación</b></p>
         <button>Desbloquear CV optimizado – $1</button>
       </div>
     `;
 
   } catch(e){
-    document.getElementById("result").innerHTML = "Error";
+    document.getElementById("result").innerHTML = "Error conectando con Make";
+    console.error(e);
   }
 }
 </script>

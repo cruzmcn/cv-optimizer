@@ -2,9 +2,34 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Optimiza tu CV para ONG</title>
+
+<title>Optimizar CV para ONG | Mejora tu aplicación y consigue entrevistas</title>
+
+<meta name="description" content="Descubre por qué tu CV no está avanzando en ONGs y recibe mejoras concretas. Analiza tu perfil frente a vacantes reales y aumenta tus probabilidades.">
+
+<meta name="keywords" content="CV ONG, trabajo ONG, optimizar CV ONG, empleo cooperación internacional, mejorar currículum ONG">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Optimiza tu CV para ONG">
+<meta property="og:description" content="Descubre por qué tu CV no está avanzando y mejora tus probabilidades.">
+<meta property="og:type" content="website">
+
+<!-- SEO técnico -->
+<link rel="canonical" href="https://tusitio.com/">
+
+<!-- Schema (muy importante para SEO) -->
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "WebApplication",
+ "name": "Optimizador de CV para ONG",
+ "description": "Herramienta que analiza tu CV frente a vacantes reales de ONG y te da mejoras concretas.",
+ "applicationCategory": "BusinessApplication",
+ "operatingSystem": "All"
+}
+</script>
 
 <style>
 body {
@@ -22,7 +47,7 @@ body {
   box-shadow:0 10px 30px rgba(0,0,0,0.08);
 }
 
-h2 {
+h1 {
   font-size:32px;
   margin-bottom:10px;
 }
@@ -112,18 +137,19 @@ button {
 
 <div class="container">
 
-<h2>Descubre por qué tu CV no está avanzando en ONGs</h2>
+<h1>Descubre por qué tu CV no está avanzando en ONGs</h1>
+
 <p class="sub">
-Pega tu CV o simplemente cuenta tu experiencia. No tiene que estar perfecto — nosotros lo analizamos como un reclutador real.
+Analiza tu perfil frente a vacantes reales y recibe un diagnóstico claro como si lo evaluara un reclutador de cooperación internacional.
 </p>
 
-<textarea id="cv" placeholder="Ej: trabajé en proyectos comunitarios, apoyé actividades con población vulnerable..."></textarea>
+<textarea id="cv" placeholder="Cuenta tu experiencia o pega tu CV..."></textarea>
 
 <textarea id="job" placeholder="Pega la vacante a la que quieres aplicar..."></textarea>
 
 <div class="row">
   <input id="impact" placeholder="Impacto (ej: apoyé a más de 100 personas)">
-  <input id="role" placeholder="Rol (ej: coordinación, apoyo logístico)">
+  <input id="role" placeholder="Rol (ej: coordinación, logística)">
 </div>
 
 <input id="tools" placeholder="Herramientas (ej: Excel, reportes, trabajo en equipo)">
@@ -172,7 +198,6 @@ async function run(){
       return;
     }
 
-    // 🔥 PROTECCIÓN CONTRA ERRORES
     const errores = Array.isArray(data.errores_criticos)
       ? data.errores_criticos.join("<br>")
       : data.errores_criticos || "No disponible";
@@ -195,7 +220,7 @@ async function run(){
           ${data.score || "?"}
         </div>
 
-        <h3>Nivel: ${data.nivel || "No definido"}</h3>
+        <h3>Nivel: ${data.nivel || ""}</h3>
 
         <p><b>Diagnóstico:</b><br>${data.diagnostico || ""}</p>
 

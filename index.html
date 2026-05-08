@@ -148,7 +148,7 @@ button {
 <div class="sidebar">
 <div class="badge">Fase piloto</div>
 <h1>Optimiza tu CV para ONG</h1>
-<p>Analiza tu currículum frente a vacantes reales.</p>
+<p>Analiza tu currículum frente a vacantes reales y mejora tus probabilidades.</p>
 
 <div class="feature">✔ Diagnóstico real</div>
 <div class="feature">✔ CV optimizado</div>
@@ -158,23 +158,42 @@ button {
 <div class="main">
 
 <h3>1. CV</h3>
+<p style="font-size:13px;color:#666;">
+Puedes pegar tu CV o simplemente contar tu experiencia con tus propias palabras. 
+No tiene que estar perfecto: nosotros lo convertimos en un CV optimizado.
+</p>
+
 <div class="upload" onclick="document.getElementById('file').click()">
 Sube tu CV o haz clic
 </div>
 
 <input type="file" id="file">
-<textarea id="cv"></textarea>
+<textarea id="cv" placeholder="Ej: trabajé en proyectos comunitarios, apoyé actividades con población vulnerable..."></textarea>
 
 <h3>2. Vacante</h3>
+<p style="font-size:13px;color:#666;">
+Pega la descripción del puesto al que quieres aplicar.
+</p>
 <textarea id="job"></textarea>
 
 <h3>3. Impacto</h3>
-<input id="impact">
+<p style="font-size:13px;color:#666;">
+Resultados concretos que lograste (aunque sean aproximados).
+</p>
+<input id="impact" placeholder="Ej: apoyé a más de 100 personas">
 
 <h3>4. Rol</h3>
+<p style="font-size:13px;color:#666;">
+Describe qué hacías realmente en tu trabajo (aunque sea básico).
+Ej: coordinación, apoyo logístico, gestión de actividades.
+</p>
 <input id="role">
 
 <h3>5. Herramientas</h3>
+<p style="font-size:13px;color:#666;">
+Menciona herramientas o habilidades que usaste, aunque sean básicas.
+Ej: Excel, organización, trabajo en equipo, reportes.
+</p>
 <input id="tools">
 
 <button onclick="runAnalysis()">Analizar mi aplicación</button>
@@ -186,7 +205,6 @@ Sube tu CV o haz clic
 
 <script>
 
-// leer archivo
 document.getElementById('file').addEventListener('change', function(e){
   const file = e.target.files[0];
   if(!file) return;
@@ -205,7 +223,7 @@ let interval;
 
 async function runAnalysis(){
 
-  const cv = cvInput = document.getElementById("cv").value;
+  const cv = document.getElementById("cv").value;
   const job = document.getElementById("job").value;
   const impact = document.getElementById("impact").value;
   const role = document.getElementById("role").value;
@@ -232,29 +250,14 @@ async function runAnalysis(){
       body:JSON.stringify({cv,job,impact,role,tools})
     });
 
-    const text = await res.text();
+    const data = await res.json();
     clearInterval(interval);
 
-    const data = JSON.parse(text);
-    const resultText = (data.result || "").toLowerCase();
-
-    // 🔥 SCORE
-    let score = 50;
     let color = "#f59e0b";
+    if(data.score > 75) color = "#16a34a";
+    if(data.score < 50) color = "#dc2626";
 
-    if(resultText.includes("alto")) {
-      score = 85;
-      color = "#16a34a";
-    } else if(resultText.includes("medio")) {
-      score = 60;
-      color = "#f59e0b";
-    } else if(resultText.includes("bajo")) {
-      score = 35;
-      color = "#dc2626";
-    }
-
-    // 🔥 MENSAJE
-    let warning = score >= 75 
+    let warning = data.score >= 75
       ? `<p style="color:green;font-weight:bold;">Buen perfil. Estás bien posicionado.</p>`
       : `<p style="color:red;font-weight:bold;">Este perfil puede quedar fuera si no se optimiza.</p>`;
 
@@ -263,11 +266,16 @@ async function runAnalysis(){
 
         <div class="score-box">
           <div class="score-circle" style="background:${color}">
-            ${score}
+            ${data.score}
           </div>
         </div>
 
-        ${data.result}
+        <h3>Nivel: ${data.nivel}</h3>
+
+        <p><b>Diagnóstico:</b><br>${data.diagnostico}</p>
+        <p><b>Errores críticos:</b><br>${data.errores_criticos.join("<br>")}</p>
+        <p><b>Mejora:</b><br><b>Antes:</b> ${data.mejora_ejemplo.antes}<br><b>Después:</b> ${data.mejora_ejemplo.despues}</p>
+
         ${warning}
 
       </div>
@@ -286,6 +294,7 @@ async function runAnalysis(){
     `;
   }
 }
+
 </script>
 
 </body>

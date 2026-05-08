@@ -5,18 +5,16 @@
 
 <title>Optimizar CV para ONG | Mejora tu aplicación y consigue entrevistas</title>
 
-<meta name="description" content="Descubre por qué tu CV no está avanzando en ONGs y recibe mejoras concretas. Analiza tu perfil frente a vacantes reales y aumenta tus probabilidades.">
+<meta name="description" content="Descubre por qué tu CV no avanza en ONGs y recibe mejoras concretas. Analiza tu perfil frente a vacantes reales y aumenta tus probabilidades.">
 <meta name="keywords" content="CV ONG, trabajo ONG, optimizar CV ONG, empleo cooperación internacional">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="canonical" href="https://tusitio.com/">
 
-<!-- Open Graph -->
 <meta property="og:title" content="Optimiza tu CV para ONG">
 <meta property="og:description" content="Descubre por qué tu CV no está avanzando y mejora tus probabilidades.">
 <meta property="og:type" content="website">
 
-<!-- PDF.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <style>
@@ -35,36 +33,33 @@ body {
   box-shadow:0 10px 30px rgba(0,0,0,0.08);
 }
 
-h1 {
-  font-size:32px;
-}
+h1 { font-size:32px; }
 
-.sub {
-  color:#666;
-  margin-bottom:20px;
-}
+.sub { color:#666; margin-bottom:25px; }
 
 textarea, input {
   width:100%;
   padding:14px;
-  margin-top:10px;
+  margin-top:12px;
   border-radius:10px;
   border:1px solid #ddd;
+  box-sizing:border-box;
 }
 
 .row {
   display:flex;
-  gap:10px;
+  gap:12px;
+  margin-top:5px;
 }
 
-.row input {
+.row > div {
   flex:1;
 }
 
 button {
   width:100%;
   padding:16px;
-  margin-top:20px;
+  margin-top:25px;
   border:none;
   border-radius:12px;
   background:linear-gradient(90deg,#4f46e5,#7c3aed);
@@ -74,7 +69,7 @@ button {
 }
 
 .result {
-  margin-top:20px;
+  margin-top:25px;
   padding:20px;
   background:#f9fafb;
   border-radius:12px;
@@ -95,7 +90,22 @@ small {
   display:block;
   font-size:12px;
   color:#666;
-  margin-bottom:10px;
+  margin:5px 0 10px;
+}
+
+/* loader limpio */
+.loader {
+  width:40px;
+  height:40px;
+  border:3px solid #e5e7eb;
+  border-top:3px solid #6d28d9;
+  border-radius:50%;
+  margin:auto;
+  animation:spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
 }
 </style>
 </head>
@@ -167,9 +177,6 @@ async function run(){
 
   let cvText = document.getElementById("cv").value || "";
 
-  console.log("LENGTH CV:", cvText.length);
-
-  // ✅ FIX REAL AQUÍ
   if(cvText.trim().length < 80){
     result.innerHTML = `
       <div class="result">
@@ -184,7 +191,12 @@ async function run(){
     return;
   }
 
-  result.innerHTML = "Analizando...";
+  // loader limpio (sin texto feo)
+  result.innerHTML = `
+    <div class="result">
+      <div class="loader"></div>
+    </div>
+  `;
 
   try{
     const res = await fetch("https://hook.us2.make.com/wa5vw1jfga23bsqd2is1mhqnn3pijfcr",{
@@ -200,26 +212,35 @@ async function run(){
     });
 
     const text = await res.text();
-    console.log("RAW RESPONSE:", text);
-
     const data = JSON.parse(text);
 
     result.innerHTML = `
       <div class="result">
+
         <div class="score-circle" style="background:#4f46e5">
-          ${data.score}
+          ${data?.score ?? "?"}
         </div>
 
-        <h3>${data.nivel}</h3>
+        <h3>${data?.nivel ?? "Sin nivel"}</h3>
 
-        <p><b>Diagnóstico:</b><br>${data.diagnostico}</p>
+        <p>
+          <b>Diagnóstico:</b><br>
+          ${data?.diagnostico ?? "No disponible"}
+        </p>
 
-        ${(Array.isArray(data?.errores_criticos)
-  : data?.errores_criticos || "No disponible")}
+        <p>
+          <b>Errores:</b><br>
+          ${
+            Array.isArray(data?.errores_criticos)
+              ? data.errores_criticos.join("<br>")
+              : (data?.errores_criticos ?? "No disponible")
+          }
+        </p>
 
-        <p><b>Mejora:</b><br>
-        <b>Antes:</b> ${data.mejora_ejemplo.antes}<br>
-        <b>Después:</b> ${data.mejora_ejemplo.despues}
+        <p>
+          <b>Mejora:</b><br>
+          <b>Antes:</b> ${data?.mejora_ejemplo?.antes ?? "No disponible"}<br>
+          <b>Después:</b> ${data?.mejora_ejemplo?.despues ?? "No disponible"}
         </p>
 
         <div style="margin-top:20px;background:#fff3cd;padding:15px;border-radius:10px;">

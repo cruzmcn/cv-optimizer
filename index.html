@@ -214,7 +214,8 @@ async function run(){
 
         <p><b>Diagnóstico:</b><br>${data.diagnostico}</p>
 
-        <p><b>Errores:</b><br>${data.errores_criticos.join("<br>")}</p>
+        ${(Array.isArray(data?.errores_criticos)
+  : data?.errores_criticos || "No disponible")}
 
         <p><b>Mejora:</b><br>
         <b>Antes:</b> ${data.mejora_ejemplo.antes}<br>

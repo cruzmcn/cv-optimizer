@@ -2,23 +2,108 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Optimizar CV ONG</title>
+<title>Optimiza tu CV para ONG</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body { font-family: Arial; background:#f5f7ff; }
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  background: linear-gradient(135deg,#eef2ff,#f8fafc);
+  margin:0;
+}
 
 .container {
-  max-width:800px;
-  margin:40px auto;
+  max-width:900px;
+  margin:60px auto;
   background:white;
-  padding:30px;
+  padding:40px;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+h2 {
+  font-size:32px;
+  margin-bottom:10px;
+}
+
+.sub {
+  font-size:14px;
+  color:#666;
+  margin-bottom:20px;
+}
+
+textarea, input {
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  margin-bottom:15px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  font-size:14px;
+}
+
+textarea {
+  min-height:100px;
+}
+
+.row {
+  display:flex;
+  gap:15px;
+}
+
+.row input {
+  flex:1;
+}
+
+button {
+  width:100%;
+  padding:16px;
+  border:none;
   border-radius:12px;
+  background:linear-gradient(90deg,#4f46e5,#7c3aed);
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.result {
+  margin-top:25px;
+  padding:20px;
+  background:#f9fafb;
+  border-radius:12px;
+  white-space:pre-wrap;
 }
 
 .score-circle {
-  width:90px; height:90px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-size:24px; color:white; margin:auto;
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:22px;
+  margin:10px auto;
+}
+
+.loader {
+  text-align:center;
+  padding:20px;
+}
+
+.spinner {
+  width:40px;
+  height:40px;
+  border:4px solid #ddd;
+  border-top:4px solid #6d28d9;
+  border-radius:50%;
+  margin:auto;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform:rotate(360deg); }
 }
 </style>
 </head>
@@ -27,15 +112,23 @@ body { font-family: Arial; background:#f5f7ff; }
 
 <div class="container">
 
-<h2>Optimiza tu CV</h2>
+<h2>Descubre por qué tu CV no está avanzando en ONGs</h2>
+<p class="sub">
+Pega tu CV o simplemente cuenta tu experiencia. No tiene que estar perfecto — nosotros lo analizamos como un reclutador real.
+</p>
 
-<textarea id="cv" placeholder="CV"></textarea>
-<textarea id="job" placeholder="Vacante"></textarea>
-<input id="impact" placeholder="Impacto">
-<input id="role" placeholder="Rol">
-<input id="tools" placeholder="Herramientas">
+<textarea id="cv" placeholder="Ej: trabajé en proyectos comunitarios, apoyé actividades con población vulnerable..."></textarea>
 
-<button onclick="run()">Analizar</button>
+<textarea id="job" placeholder="Pega la vacante a la que quieres aplicar..."></textarea>
+
+<div class="row">
+  <input id="impact" placeholder="Impacto (ej: apoyé a más de 100 personas)">
+  <input id="role" placeholder="Rol (ej: coordinación, apoyo logístico)">
+</div>
+
+<input id="tools" placeholder="Herramientas (ej: Excel, reportes, trabajo en equipo)">
+
+<button onclick="run()">Analizar mi aplicación</button>
 
 <div id="result"></div>
 
@@ -44,61 +137,91 @@ body { font-family: Arial; background:#f5f7ff; }
 <script>
 async function run(){
 
-  const res = await fetch("https://hook.us2.make.com/wa5vw1jfga23bsqd2is1mhqnn3pijfcr", {
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body:JSON.stringify({
-      cv:cv.value,
-      job:job.value,
-      impact:impact.value,
-      role:role.value,
-      tools:tools.value
-    })
-  });
-
-  let text = await res.text();
-  let data;
+  document.getElementById("result").innerHTML = `
+    <div class="loader">
+      <div class="spinner"></div>
+      <p>Analizando tu perfil...</p>
+    </div>
+  `;
 
   try {
-    data = JSON.parse(text);
+
+    const res = await fetch("https://hook.us2.make.com/wa5vw1jfga23bsqd2is1mhqnn3pijfcr", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({
+        cv:cv.value,
+        job:job.value,
+        impact:impact.value,
+        role:role.value,
+        tools:tools.value
+      })
+    });
+
+    const text = await res.text();
+    let data;
+
+    try {
+      data = JSON.parse(text);
+    } catch(e){
+      document.getElementById("result").innerHTML = `
+        <div class="result">
+          Error del servidor:<br><br>${text}
+        </div>
+      `;
+      return;
+    }
+
+    // 🔥 PROTECCIÓN CONTRA ERRORES
+    const errores = Array.isArray(data.errores_criticos)
+      ? data.errores_criticos.join("<br>")
+      : data.errores_criticos || "No disponible";
+
+    const antes = data.mejora_ejemplo?.antes || "No disponible";
+    const despues = data.mejora_ejemplo?.despues || "No disponible";
+
+    let color = "#f59e0b";
+    if(data.score > 75) color = "#16a34a";
+    if(data.score < 50) color = "#dc2626";
+
+    let mensaje = data.score >= 75
+      ? `<p style="color:green;font-weight:bold;">Buen perfil. Estás bien posicionado.</p>`
+      : `<p style="color:red;font-weight:bold;">Este perfil puede quedar fuera si no se optimiza.</p>`;
+
+    document.getElementById("result").innerHTML = `
+      <div class="result">
+
+        <div class="score-circle" style="background:${color}">
+          ${data.score || "?"}
+        </div>
+
+        <h3>Nivel: ${data.nivel || "No definido"}</h3>
+
+        <p><b>Diagnóstico:</b><br>${data.diagnostico || ""}</p>
+
+        <p><b>Errores críticos:</b><br>${errores}</p>
+
+        <p><b>Mejora:</b><br>
+        <b>Antes:</b> ${antes}<br>
+        <b>Después:</b> ${despues}
+        </p>
+
+        ${mensaje}
+
+        <div style="margin-top:20px; padding:15px; background:#fff3cd; border-radius:10px;">
+          <button>Desbloquear CV optimizado – $1</button>
+        </div>
+
+      </div>
+    `;
+
   } catch(e){
     document.getElementById("result").innerHTML = `
-      <p>Error parseando JSON:</p>
-      <pre>${text}</pre>
+      <div class="result">
+        Error conectando con el sistema: ${e.message}
+      </div>
     `;
-    return;
   }
-
-  // 🔥 DEFENSIVO
-  const errores = Array.isArray(data.errores_criticos)
-    ? data.errores_criticos.join("<br>")
-    : data.errores_criticos || "No disponible";
-
-  const antes = data.mejora_ejemplo?.antes || "No disponible";
-  const despues = data.mejora_ejemplo?.despues || "No disponible";
-
-  let color = "#f59e0b";
-  if(data.score > 75) color = "#16a34a";
-  if(data.score < 50) color = "#dc2626";
-
-  document.getElementById("result").innerHTML = `
-    <div class="score-circle" style="background:${color}">
-      ${data.score || "?"}
-    </div>
-
-    <h3>Nivel: ${data.nivel || "No definido"}</h3>
-
-    <p><b>Diagnóstico:</b><br>${data.diagnostico || "No disponible"}</p>
-
-    <p><b>Errores críticos:</b><br>${errores}</p>
-
-    <p><b>Mejora:</b><br>
-    <b>Antes:</b> ${antes}<br>
-    <b>Después:</b> ${despues}
-    </p>
-
-    <button>Optimizar CV – $1</button>
-  `;
 }
 </script>
 

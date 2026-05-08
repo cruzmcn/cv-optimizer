@@ -37,10 +37,16 @@ h1 { font-size:32px; }
 
 .sub { color:#666; margin-bottom:25px; }
 
+label {
+  font-weight:600;
+  display:block;
+  margin-top:20px;
+}
+
 textarea, input {
   width:100%;
   padding:14px;
-  margin-top:12px;
+  margin-top:8px;
   border-radius:10px;
   border:1px solid #ddd;
   box-sizing:border-box;
@@ -49,7 +55,6 @@ textarea, input {
 .row {
   display:flex;
   gap:12px;
-  margin-top:5px;
 }
 
 .row > div {
@@ -90,7 +95,7 @@ small {
   display:block;
   font-size:12px;
   color:#666;
-  margin:5px 0 10px;
+  margin-top:5px;
 }
 
 /* loader limpio */
@@ -119,25 +124,30 @@ small {
 
 <input type="file" id="file" accept=".pdf,.txt">
 
-<textarea id="cv" placeholder="O pega tu CV aquí..."></textarea>
+<label>CV</label>
+<textarea id="cv" placeholder="Pega tu CV aquí..."></textarea>
 <small>Puedes pegar tu CV completo o simplemente contar tu experiencia. No tiene que estar perfecto — lo analizamos como un reclutador real.</small>
 
+<label>Vacante</label>
 <textarea id="job" placeholder="Pega la vacante..."></textarea>
 <small>Copia la descripción del puesto al que quieres aplicar.</small>
 
 <div class="row">
   <div>
-    <input id="impact" placeholder="Impacto">
-    <small>Ej: apoyé a más de 120 personas, mejoré procesos o ejecuté actividades.</small>
+    <label>Impacto</label>
+    <input id="impact" placeholder="Ej: apoyé a más de 120 personas">
+    <small>Resultados concretos ayudan a mejorar tu análisis.</small>
   </div>
   <div>
-    <input id="role" placeholder="Rol">
-    <small>Ej: coordinación, implementación, apoyo operativo o liderazgo.</small>
+    <label>Rol</label>
+    <input id="role" placeholder="Ej: coordinación, apoyo operativo">
+    <small>Describe tu nivel de responsabilidad.</small>
   </div>
 </div>
 
-<input id="tools" placeholder="Herramientas">
-<small>Ej: Excel, reportes, monitoreo, trabajo comunitario.</small>
+<label>Herramientas</label>
+<input id="tools" placeholder="Ej: Excel, reportes, monitoreo">
+<small>Incluye herramientas o sistemas que utilizaste.</small>
 
 <button onclick="run()">Analizar mi aplicación</button>
 
@@ -191,7 +201,6 @@ async function run(){
     return;
   }
 
-  // loader limpio (sin texto feo)
   result.innerHTML = `
     <div class="result">
       <div class="loader"></div>
@@ -223,19 +232,13 @@ async function run(){
 
         <h3>${data?.nivel ?? "Sin nivel"}</h3>
 
-        <p>
-          <b>Diagnóstico:</b><br>
-          ${data?.diagnostico ?? "No disponible"}
-        </p>
+        <p><b>Diagnóstico:</b><br>${data?.diagnostico ?? "No disponible"}</p>
 
-        <p>
-          <b>Errores:</b><br>
-          ${
-            Array.isArray(data?.errores_criticos)
-              ? data.errores_criticos.join("<br>")
-              : (data?.errores_criticos ?? "No disponible")
-          }
-        </p>
+        <p><b>Errores:</b><br>${
+          Array.isArray(data?.errores_criticos)
+          ? data.errores_criticos.join("<br>")
+          : (data?.errores_criticos ?? "No disponible")
+        }</p>
 
         <p>
           <b>Mejora:</b><br>

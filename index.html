@@ -7,8 +7,6 @@
 
 <meta name="description" content="Optimiza tu CV para ONG y aumenta tus probabilidades de ser seleccionado. Analiza tu currículum frente a vacantes reales y mejora tu aplicación en minutos.">
 
-<meta name="keywords" content="CV ONG, trabajo ONG, optimizar CV, mejorar currículum, cover letter ONG, empleo ONG">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -29,6 +27,7 @@ body {
 
 h1 {
   font-size:28px;
+  margin-bottom:10px;
 }
 
 .subtitle {
@@ -42,6 +41,7 @@ h1 {
 
 .label {
   font-weight:600;
+  margin-bottom:5px;
 }
 
 .helper {
@@ -69,11 +69,16 @@ button {
   cursor:pointer;
 }
 
+button:hover {
+  opacity:0.9;
+}
+
 .result-box {
   margin-top:20px;
   padding:20px;
   background:#f9fafb;
   border-radius:12px;
+  white-space:pre-wrap;
 }
 
 .paywall {
@@ -81,6 +86,7 @@ button {
   padding:20px;
   border-radius:12px;
   margin-top:20px;
+  text-align:center;
 }
 
 .spinner {
@@ -115,32 +121,46 @@ button {
 Analiza tu currículum frente a vacantes reales y mejora tus probabilidades en minutos.
 </p>
 
+<!-- CV -->
 <div class="field">
-<div class="label">1. Tu CV</div>
-<div class="helper">Pega tu experiencia, proyectos o CV completo.</div>
-<textarea id="cv"></textarea>
+  <div class="label">1. Tu CV</div>
+  <div class="helper">
+    Puedes subir tu CV o pegar el contenido manualmente.
+  </div>
+
+  <input type="file" id="cvFile" accept=".txt,.pdf">
+
+  <textarea id="cv" placeholder="Ej: Coordiné proyectos sociales, trabajé con comunidades..."></textarea>
 </div>
 
+<!-- VACANTE -->
 <div class="field">
-<div class="label">2. Vacante</div>
-<div class="helper">Pega la oferta de trabajo a la que quieres aplicar.</div>
-<textarea id="job"></textarea>
+  <div class="label">2. Vacante</div>
+  <div class="helper">
+    Pega la descripción del puesto al que quieres aplicar.
+  </div>
+  <textarea id="job" placeholder="Ej: Buscamos coordinador con experiencia en monitoreo..."></textarea>
 </div>
 
+<!-- IMPACTO -->
 <div class="field">
-<div class="label">3. Impacto</div>
-<div class="helper">Resultados concretos (números ayudan mucho).</div>
-<input id="impact">
+  <div class="label">3. Impacto</div>
+  <div class="helper">
+    Resultados concretos que lograste (usa números).
+  </div>
+  <input id="impact" placeholder="Ej: beneficié a 200 personas">
 </div>
 
+<!-- ROL -->
 <div class="field">
-<div class="label">4. Rol</div>
-<input id="role">
+  <div class="label">4. Rol</div>
+  <input id="role" placeholder="Ej: coordinación, implementación">
 </div>
 
+<!-- HERRAMIENTAS -->
 <div class="field">
-<div class="label">5. Herramientas</div>
-<input id="tools">
+  <div class="label">5. Herramientas</div>
+  <input id="tools" placeholder="Ej: Excel, gestión de proyectos">
 </div>
 
 <button onclick="runAnalysis()">Analizar mi aplicación</button>
@@ -150,35 +170,84 @@ Analiza tu currículum frente a vacantes reales y mejora tus probabilidades en m
 </div>
 
 <script>
+
+// 🔹 Leer archivo
+document.getElementById("cvFile").addEventListener("change", function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(event){
+    document.getElementById("cv").value = event.target.result;
+  };
+
+  reader.readAsText(file);
+});
+
+// 🔹 Loading dinámico
+let steps = [
+  "Analizando tu CV...",
+  "Comparando con la vacante...",
+  "Detectando mejoras..."
+];
+
+let interval;
+
+// 🔹 Ejecutar análisis
 async function runAnalysis(){
+
+  const cv = document.getElementById("cv").value;
+  const job = document.getElementById("job").value;
+  const impact = document.getElementById("impact").value;
+  const role = document.getElementById("role").value;
+  const tools = document.getElementById("tools").value;
 
   document.getElementById("result").innerHTML = `
     <div class="loading-box">
       <div class="spinner"></div>
-      <p>Analizando tu CV frente a la vacante...</p>
+      <p id="loadingText">Analizando...</p>
+      <small>Esto puede tardar unos segundos</small>
     </div>
   `;
 
-  const res = await fetch("TU_WEBHOOK_AQUI", {
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body:JSON.stringify({
-      cv:cv.value,
-      job:job.value,
-      impact:impact.value,
-      role:role.value,
-      tools:tools.value
-    })
-  });
+  let i = 0;
+  interval = setInterval(()=>{
+    document.getElementById("loadingText").innerText = steps[i];
+    i = (i+1)%steps.length;
+  },1500);
 
-  const data = await res.json();
+  try {
 
-  document.getElementById("result").innerHTML = `
-    <div class="result-box">
-      <pre>${data.result}</pre>
-    </div>
-  `;
+    const res = await fetch("TU_WEBHOOK_AQUI", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({cv,job,impact,role,tools})
+    });
+
+    const data = await res.json();
+
+    clearInterval(interval);
+
+    document.getElementById("result").innerHTML = `
+      <div class="result-box">
+        ${data.result || "No se pudo generar el análisis. Revisa configuración."}
+        <p style="color:red;font-weight:bold;margin-top:10px;">
+        Este perfil puede quedar fuera si no se optimiza.
+        </p>
+      </div>
+
+      <div class="paywall">
+        <button>Desbloquear CV optimizado – $1</button>
+      </div>
+    `;
+
+  } catch(e){
+    clearInterval(interval);
+    document.getElementById("result").innerHTML = "Error conectando con el sistema";
+  }
 }
+
 </script>
 
 </body>

@@ -2,299 +2,104 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-
-<title>Optimizar CV para ONG | Mejora tu aplicación</title>
-
-<meta name="description" content="Optimiza tu CV para ONG y aumenta tus probabilidades de ser seleccionado.">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Optimizar CV ONG</title>
 
 <style>
-body {
-  margin:0;
-  font-family: 'Inter', Arial, sans-serif;
-  background: linear-gradient(135deg,#eef2ff,#f8fafc);
-}
+body { font-family: Arial; background:#f5f7ff; }
 
-.wrapper {
-  display:flex;
-  max-width:1200px;
+.container {
+  max-width:800px;
   margin:40px auto;
-  gap:20px;
-}
-
-.sidebar {
-  width:35%;
   background:white;
   padding:30px;
-  border-radius:16px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.08);
-}
-
-.main {
-  width:65%;
-  background:white;
-  padding:30px;
-  border-radius:16px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.08);
-}
-
-h1 { font-size:32px; }
-
-.badge {
-  background:#e0e7ff;
-  padding:6px 12px;
-  border-radius:20px;
-  font-size:12px;
-  display:inline-block;
-  margin-bottom:10px;
-}
-
-.feature {
-  margin-top:20px;
-  display:flex;
-  gap:10px;
-}
-
-input, textarea {
-  width:100%;
-  padding:14px;
-  margin-top:12px;
-  border-radius:10px;
-  border:1px solid #ddd;
-}
-
-.upload {
-  border:2px dashed #6366f1;
-  padding:30px;
-  text-align:center;
   border-radius:12px;
-  margin-top:15px;
-  cursor:pointer;
-}
-
-button {
-  width:100%;
-  padding:16px;
-  margin-top:20px;
-  border:none;
-  border-radius:12px;
-  background:linear-gradient(90deg,#4f46e5,#7c3aed);
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-}
-
-.result {
-  margin-top:20px;
-  padding:20px;
-  background:#f9fafb;
-  border-radius:12px;
-  white-space:pre-wrap;
-}
-
-.paywall {
-  background:#fff3cd;
-  padding:20px;
-  border-radius:12px;
-  margin-top:20px;
-  text-align:center;
-}
-
-/* SCORE */
-.score-box {
-  text-align:center;
-  margin-bottom:15px;
 }
 
 .score-circle {
-  width:90px;
-  height:90px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:0 auto;
-  font-size:22px;
-  font-weight:bold;
-  color:white;
-}
-
-/* Loader */
-.loading-box {
-  text-align:center;
-  padding:30px;
-}
-
-.spinner {
-  width:40px;
-  height:40px;
-  border:4px solid #ddd;
-  border-top:4px solid #6d28d9;
-  border-radius:50%;
-  margin:0 auto 15px;
-  animation:spin 1s linear infinite;
-}
-
-@keyframes spin {
-  100% { transform:rotate(360deg); }
+  width:90px; height:90px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:24px; color:white; margin:auto;
 }
 </style>
 </head>
 
 <body>
 
-<div class="wrapper">
+<div class="container">
 
-<div class="sidebar">
-<div class="badge">Fase piloto</div>
-<h1>Optimiza tu CV para ONG</h1>
-<p>Analiza tu currículum frente a vacantes reales y mejora tus probabilidades.</p>
+<h2>Optimiza tu CV</h2>
 
-<div class="feature">✔ Diagnóstico real</div>
-<div class="feature">✔ CV optimizado</div>
-<div class="feature">✔ Cover letter</div>
-</div>
+<textarea id="cv" placeholder="CV"></textarea>
+<textarea id="job" placeholder="Vacante"></textarea>
+<input id="impact" placeholder="Impacto">
+<input id="role" placeholder="Rol">
+<input id="tools" placeholder="Herramientas">
 
-<div class="main">
-
-<h3>1. CV</h3>
-<p style="font-size:13px;color:#666;">
-Puedes pegar tu CV o simplemente contar tu experiencia con tus propias palabras. 
-No tiene que estar perfecto: nosotros lo convertimos en un CV optimizado.
-</p>
-
-<div class="upload" onclick="document.getElementById('file').click()">
-Sube tu CV o haz clic
-</div>
-
-<input type="file" id="file">
-<textarea id="cv" placeholder="Ej: trabajé en proyectos comunitarios, apoyé actividades con población vulnerable..."></textarea>
-
-<h3>2. Vacante</h3>
-<p style="font-size:13px;color:#666;">
-Pega la descripción del puesto al que quieres aplicar.
-</p>
-<textarea id="job"></textarea>
-
-<h3>3. Impacto</h3>
-<p style="font-size:13px;color:#666;">
-Resultados concretos que lograste (aunque sean aproximados).
-</p>
-<input id="impact" placeholder="Ej: apoyé a más de 100 personas">
-
-<h3>4. Rol</h3>
-<p style="font-size:13px;color:#666;">
-Describe qué hacías realmente en tu trabajo (aunque sea básico).
-Ej: coordinación, apoyo logístico, gestión de actividades.
-</p>
-<input id="role">
-
-<h3>5. Herramientas</h3>
-<p style="font-size:13px;color:#666;">
-Menciona herramientas o habilidades que usaste, aunque sean básicas.
-Ej: Excel, organización, trabajo en equipo, reportes.
-</p>
-<input id="tools">
-
-<button onclick="runAnalysis()">Analizar mi aplicación</button>
+<button onclick="run()">Analizar</button>
 
 <div id="result"></div>
 
 </div>
-</div>
 
 <script>
+async function run(){
 
-document.getElementById('file').addEventListener('change', function(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => document.getElementById('cv').value = e.target.result;
-  reader.readAsText(file);
-});
+  const res = await fetch("https://hook.us2.make.com/wa5vw1jfga23bsqd2is1mhqnn3pijfcr", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({
+      cv:cv.value,
+      job:job.value,
+      impact:impact.value,
+      role:role.value,
+      tools:tools.value
+    })
+  });
 
-let steps = [
-  "Analizando tu CV...",
-  "Comparando con la vacante...",
-  "Detectando mejoras..."
-];
-
-let interval;
-
-async function runAnalysis(){
-
-  const cv = document.getElementById("cv").value;
-  const job = document.getElementById("job").value;
-  const impact = document.getElementById("impact").value;
-  const role = document.getElementById("role").value;
-  const tools = document.getElementById("tools").value;
-
-  document.getElementById("result").innerHTML = `
-    <div class="loading-box">
-      <div class="spinner"></div>
-      <p id="loadingText">Analizando...</p>
-    </div>
-  `;
-
-  let i = 0;
-  interval = setInterval(()=>{
-    document.getElementById("loadingText").innerText = steps[i];
-    i = (i+1)%steps.length;
-  },1500);
+  let text = await res.text();
+  let data;
 
   try {
-
-    const res = await fetch("https://hook.us2.make.com/wa5vw1jfga23bsqd2is1mhqnn3pijfcr", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body:JSON.stringify({cv,job,impact,role,tools})
-    });
-
-    const data = await res.json();
-    clearInterval(interval);
-
-    let color = "#f59e0b";
-    if(data.score > 75) color = "#16a34a";
-    if(data.score < 50) color = "#dc2626";
-
-    let warning = data.score >= 75
-      ? `<p style="color:green;font-weight:bold;">Buen perfil. Estás bien posicionado.</p>`
-      : `<p style="color:red;font-weight:bold;">Este perfil puede quedar fuera si no se optimiza.</p>`;
-
-    document.getElementById("result").innerHTML = `
-      <div class="result">
-
-        <div class="score-box">
-          <div class="score-circle" style="background:${color}">
-            ${data.score}
-          </div>
-        </div>
-
-        <h3>Nivel: ${data.nivel}</h3>
-
-        <p><b>Diagnóstico:</b><br>${data.diagnostico}</p>
-        <p><b>Errores críticos:</b><br>${data.errores_criticos.join("<br>")}</p>
-        <p><b>Mejora:</b><br><b>Antes:</b> ${data.mejora_ejemplo.antes}<br><b>Después:</b> ${data.mejora_ejemplo.despues}</p>
-
-        ${warning}
-
-      </div>
-
-      <div class="paywall">
-        <button>Desbloquear CV optimizado – $1</button>
-      </div>
-    `;
-
+    data = JSON.parse(text);
   } catch(e){
-    clearInterval(interval);
     document.getElementById("result").innerHTML = `
-      <div class="result">
-        Error: ${e.message}
-      </div>
+      <p>Error parseando JSON:</p>
+      <pre>${text}</pre>
     `;
+    return;
   }
-}
 
+  // 🔥 DEFENSIVO
+  const errores = Array.isArray(data.errores_criticos)
+    ? data.errores_criticos.join("<br>")
+    : data.errores_criticos || "No disponible";
+
+  const antes = data.mejora_ejemplo?.antes || "No disponible";
+  const despues = data.mejora_ejemplo?.despues || "No disponible";
+
+  let color = "#f59e0b";
+  if(data.score > 75) color = "#16a34a";
+  if(data.score < 50) color = "#dc2626";
+
+  document.getElementById("result").innerHTML = `
+    <div class="score-circle" style="background:${color}">
+      ${data.score || "?"}
+    </div>
+
+    <h3>Nivel: ${data.nivel || "No definido"}</h3>
+
+    <p><b>Diagnóstico:</b><br>${data.diagnostico || "No disponible"}</p>
+
+    <p><b>Errores críticos:</b><br>${errores}</p>
+
+    <p><b>Mejora:</b><br>
+    <b>Antes:</b> ${antes}<br>
+    <b>Después:</b> ${despues}
+    </p>
+
+    <button>Optimizar CV – $1</button>
+  `;
+}
 </script>
 
 </body>

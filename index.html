@@ -41,7 +41,6 @@ h1 {
 
 .label {
   font-weight:600;
-  margin-bottom:5px;
 }
 
 .helper {
@@ -127,9 +126,7 @@ Analiza tu currículum frente a vacantes reales y mejora tus probabilidades en m
   <div class="helper">
     Puedes subir tu CV o pegar el contenido manualmente.
   </div>
-
   <input type="file" id="cvFile" accept=".txt,.pdf">
-
   <textarea id="cv" placeholder="Ej: Coordiné proyectos sociales, trabajé con comunidades..."></textarea>
 </div>
 
@@ -171,21 +168,19 @@ Analiza tu currículum frente a vacantes reales y mejora tus probabilidades en m
 
 <script>
 
-// 🔹 Leer archivo
+// Leer archivo
 document.getElementById("cvFile").addEventListener("change", function(e){
   const file = e.target.files[0];
   if(!file) return;
 
   const reader = new FileReader();
-
   reader.onload = function(event){
     document.getElementById("cv").value = event.target.result;
   };
-
   reader.readAsText(file);
 });
 
-// 🔹 Loading dinámico
+// Loading dinámico
 let steps = [
   "Analizando tu CV...",
   "Comparando con la vacante...",
@@ -194,7 +189,7 @@ let steps = [
 
 let interval;
 
-// 🔹 Ejecutar análisis
+// Ejecutar análisis
 async function runAnalysis(){
 
   const cv = document.getElementById("cv").value;
@@ -225,13 +220,27 @@ async function runAnalysis(){
       body:JSON.stringify({cv,job,impact,role,tools})
     });
 
-    const data = await res.json();
+    const text = await res.text();
 
     clearInterval(interval);
 
+    let data;
+
+    try {
+      data = JSON.parse(text);
+    } catch(e) {
+      document.getElementById("result").innerHTML = `
+        <div class="result-box">
+          ⚠️ Error del servidor:<br><br>
+          ${text}
+        </div>
+      `;
+      return;
+    }
+
     document.getElementById("result").innerHTML = `
       <div class="result-box">
-        ${data.result || "No se pudo generar el análisis. Revisa configuración."}
+        ${data.result || "No se pudo generar el análisis"}
         <p style="color:red;font-weight:bold;margin-top:10px;">
         Este perfil puede quedar fuera si no se optimiza.
         </p>
@@ -244,7 +253,12 @@ async function runAnalysis(){
 
   } catch(e){
     clearInterval(interval);
-    document.getElementById("result").innerHTML = "Error conectando con el sistema";
+    document.getElementById("result").innerHTML = `
+      <div class="result-box">
+        ❌ Error real:<br><br>
+        ${e.message}
+      </div>
+    `;
   }
 }
 

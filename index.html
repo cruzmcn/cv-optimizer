@@ -3,63 +3,79 @@
 <head>
 <meta charset="UTF-8">
 
-<title>Optimizar CV para ONG | Mejora tu aplicación y consigue trabajo en ONGs</title>
+<title>Optimizar CV para ONG | Mejora tu aplicación</title>
 
-<meta name="description" content="Optimiza tu CV para ONG y aumenta tus probabilidades de ser seleccionado. Analiza tu currículum frente a vacantes reales y mejora tu aplicación en minutos.">
-
+<meta name="description" content="Optimiza tu CV para ONG y aumenta tus probabilidades de ser seleccionado.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body {
-  font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg,#eef2ff,#f8fafc);
   margin:0;
+  font-family: 'Inter', Arial, sans-serif;
+  background: linear-gradient(135deg,#eef2ff,#f8fafc);
 }
 
-.container {
-  max-width:900px;
+.wrapper {
+  display:flex;
+  max-width:1200px;
   margin:40px auto;
+  gap:20px;
+}
+
+.sidebar {
+  width:35%;
   background:white;
   padding:30px;
   border-radius:16px;
   box-shadow:0 10px 30px rgba(0,0,0,0.08);
 }
 
-h1 {
-  font-size:28px;
+.main {
+  width:65%;
+  background:white;
+  padding:30px;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+h1 { font-size:32px; }
+
+.badge {
+  background:#e0e7ff;
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:12px;
+  display:inline-block;
   margin-bottom:10px;
 }
 
-.subtitle {
-  color:#555;
-  margin-bottom:20px;
-}
-
-.field {
+.feature {
   margin-top:20px;
+  display:flex;
+  gap:10px;
 }
 
-.label {
-  font-weight:600;
-}
-
-.helper {
-  font-size:13px;
-  color:#666;
-  margin-bottom:8px;
-}
-
-textarea, input {
+input, textarea {
   width:100%;
   padding:14px;
+  margin-top:12px;
   border-radius:10px;
   border:1px solid #ddd;
+}
+
+.upload {
+  border:2px dashed #6366f1;
+  padding:30px;
+  text-align:center;
+  border-radius:12px;
+  margin-top:15px;
+  cursor:pointer;
 }
 
 button {
   width:100%;
   padding:16px;
-  margin-top:30px;
+  margin-top:20px;
   border:none;
   border-radius:12px;
   background:linear-gradient(90deg,#4f46e5,#7c3aed);
@@ -68,11 +84,7 @@ button {
   cursor:pointer;
 }
 
-button:hover {
-  opacity:0.9;
-}
-
-.result-box {
+.result {
   margin-top:20px;
   padding:20px;
   background:#f9fafb;
@@ -88,6 +100,31 @@ button:hover {
   text-align:center;
 }
 
+/* SCORE */
+.score-box {
+  text-align:center;
+  margin-bottom:15px;
+}
+
+.score-circle {
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto;
+  font-size:22px;
+  font-weight:bold;
+  color:white;
+}
+
+/* Loader */
+.loading-box {
+  text-align:center;
+  padding:30px;
+}
+
 .spinner {
   width:40px;
   height:40px;
@@ -101,86 +138,63 @@ button:hover {
 @keyframes spin {
   100% { transform:rotate(360deg); }
 }
-
-.loading-box {
-  text-align:center;
-  padding:30px;
-}
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="wrapper">
 
+<div class="sidebar">
+<div class="badge">Fase piloto</div>
 <h1>Optimiza tu CV para ONG</h1>
+<p>Analiza tu currículum frente a vacantes reales.</p>
 
-<p class="subtitle">
-¿No estás avanzando en procesos de selección en ONGs?  
-Analiza tu currículum frente a vacantes reales y mejora tus probabilidades en minutos.
-</p>
-
-<!-- CV -->
-<div class="field">
-  <div class="label">1. Tu CV</div>
-  <div class="helper">
-    Puedes subir tu CV o pegar el contenido manualmente.
-  </div>
-  <input type="file" id="cvFile" accept=".txt,.pdf">
-  <textarea id="cv" placeholder="Ej: Coordiné proyectos sociales, trabajé con comunidades..."></textarea>
+<div class="feature">✔ Diagnóstico real</div>
+<div class="feature">✔ CV optimizado</div>
+<div class="feature">✔ Cover letter</div>
 </div>
 
-<!-- VACANTE -->
-<div class="field">
-  <div class="label">2. Vacante</div>
-  <div class="helper">
-    Pega la descripción del puesto al que quieres aplicar.
-  </div>
-  <textarea id="job" placeholder="Ej: Buscamos coordinador con experiencia en monitoreo..."></textarea>
+<div class="main">
+
+<h3>1. CV</h3>
+<div class="upload" onclick="document.getElementById('file').click()">
+Sube tu CV o haz clic
 </div>
 
-<!-- IMPACTO -->
-<div class="field">
-  <div class="label">3. Impacto</div>
-  <div class="helper">
-    Resultados concretos que lograste (usa números).
-  </div>
-  <input id="impact" placeholder="Ej: beneficié a 200 personas">
-</div>
+<input type="file" id="file">
+<textarea id="cv"></textarea>
 
-<!-- ROL -->
-<div class="field">
-  <div class="label">4. Rol</div>
-  <input id="role" placeholder="Ej: coordinación, implementación">
-</div>
+<h3>2. Vacante</h3>
+<textarea id="job"></textarea>
 
-<!-- HERRAMIENTAS -->
-<div class="field">
-  <div class="label">5. Herramientas</div>
-  <input id="tools" placeholder="Ej: Excel, gestión de proyectos">
-</div>
+<h3>3. Impacto</h3>
+<input id="impact">
+
+<h3>4. Rol</h3>
+<input id="role">
+
+<h3>5. Herramientas</h3>
+<input id="tools">
 
 <button onclick="runAnalysis()">Analizar mi aplicación</button>
 
 <div id="result"></div>
 
 </div>
+</div>
 
 <script>
 
-// Leer archivo
-document.getElementById("cvFile").addEventListener("change", function(e){
+// leer archivo
+document.getElementById('file').addEventListener('change', function(e){
   const file = e.target.files[0];
   if(!file) return;
-
   const reader = new FileReader();
-  reader.onload = function(event){
-    document.getElementById("cv").value = event.target.result;
-  };
+  reader.onload = e => document.getElementById('cv').value = e.target.result;
   reader.readAsText(file);
 });
 
-// Loading dinámico
 let steps = [
   "Analizando tu CV...",
   "Comparando con la vacante...",
@@ -189,10 +203,9 @@ let steps = [
 
 let interval;
 
-// Ejecutar análisis
 async function runAnalysis(){
 
-  const cv = document.getElementById("cv").value;
+  const cv = cvInput = document.getElementById("cv").value;
   const job = document.getElementById("job").value;
   const impact = document.getElementById("impact").value;
   const role = document.getElementById("role").value;
@@ -202,7 +215,6 @@ async function runAnalysis(){
     <div class="loading-box">
       <div class="spinner"></div>
       <p id="loadingText">Analizando...</p>
-      <small>Esto puede tardar unos segundos</small>
     </div>
   `;
 
@@ -221,29 +233,43 @@ async function runAnalysis(){
     });
 
     const text = await res.text();
-
     clearInterval(interval);
 
-    let data;
+    const data = JSON.parse(text);
+    const resultText = (data.result || "").toLowerCase();
 
-    try {
-      data = JSON.parse(text);
-    } catch(e) {
-      document.getElementById("result").innerHTML = `
-        <div class="result-box">
-          ⚠️ Error del servidor:<br><br>
-          ${text}
-        </div>
-      `;
-      return;
+    // 🔥 SCORE
+    let score = 50;
+    let color = "#f59e0b";
+
+    if(resultText.includes("alto")) {
+      score = 85;
+      color = "#16a34a";
+    } else if(resultText.includes("medio")) {
+      score = 60;
+      color = "#f59e0b";
+    } else if(resultText.includes("bajo")) {
+      score = 35;
+      color = "#dc2626";
     }
 
+    // 🔥 MENSAJE
+    let warning = score >= 75 
+      ? `<p style="color:green;font-weight:bold;">Buen perfil. Estás bien posicionado.</p>`
+      : `<p style="color:red;font-weight:bold;">Este perfil puede quedar fuera si no se optimiza.</p>`;
+
     document.getElementById("result").innerHTML = `
-      <div class="result-box">
-        ${data.result || "No se pudo generar el análisis"}
-        <p style="color:red;font-weight:bold;margin-top:10px;">
-        Este perfil puede quedar fuera si no se optimiza.
-        </p>
+      <div class="result">
+
+        <div class="score-box">
+          <div class="score-circle" style="background:${color}">
+            ${score}
+          </div>
+        </div>
+
+        ${data.result}
+        ${warning}
+
       </div>
 
       <div class="paywall">
@@ -254,14 +280,12 @@ async function runAnalysis(){
   } catch(e){
     clearInterval(interval);
     document.getElementById("result").innerHTML = `
-      <div class="result-box">
-        ❌ Error real:<br><br>
-        ${e.message}
+      <div class="result">
+        Error: ${e.message}
       </div>
     `;
   }
 }
-
 </script>
 
 </body>

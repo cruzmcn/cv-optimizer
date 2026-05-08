@@ -6,16 +6,24 @@
 <title>Optimizar CV para ONG | Mejora tu aplicación y consigue entrevistas</title>
 
 <meta name="description" content="Descubre por qué tu CV no está avanzando en ONGs y recibe mejoras concretas. Analiza tu perfil frente a vacantes reales y aumenta tus probabilidades.">
-<meta name="keywords" content="CV ONG, trabajo ONG, optimizar CV ONG">
+<meta name="keywords" content="CV ONG, trabajo ONG, optimizar CV ONG, empleo cooperación internacional">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="canonical" href="https://tusitio.com/">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Optimiza tu CV para ONG">
+<meta property="og:description" content="Descubre por qué tu CV no está avanzando y mejora tus probabilidades.">
+<meta property="og:type" content="website">
 
 <!-- PDF.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <style>
 body {
-  font-family: 'Inter', Arial;
+  font-family: 'Inter', Arial, sans-serif;
   background: linear-gradient(135deg,#eef2ff,#f8fafc);
+  margin:0;
 }
 
 .container {
@@ -24,6 +32,16 @@ body {
   background:white;
   padding:40px;
   border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+h1 {
+  font-size:32px;
+}
+
+.sub {
+  color:#666;
+  margin-bottom:20px;
 }
 
 textarea, input {
@@ -39,6 +57,10 @@ textarea, input {
   gap:10px;
 }
 
+.row input {
+  flex:1;
+}
+
 button {
   width:100%;
   padding:16px;
@@ -48,6 +70,7 @@ button {
   background:linear-gradient(90deg,#4f46e5,#7c3aed);
   color:white;
   font-size:16px;
+  cursor:pointer;
 }
 
 .result {
@@ -57,9 +80,22 @@ button {
   border-radius:12px;
 }
 
+.score-circle {
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  margin:auto;
+}
+
 small {
+  display:block;
   font-size:12px;
   color:#666;
+  margin-bottom:10px;
 }
 </style>
 </head>
@@ -69,22 +105,29 @@ small {
 <div class="container">
 
 <h1>Descubre por qué tu CV no avanza en ONGs</h1>
-<p>Sube tu CV o escribe tu experiencia.</p>
+<p class="sub">Sube tu CV o escribe tu experiencia. No tiene que estar perfecto.</p>
 
 <input type="file" id="file" accept=".pdf,.txt">
 
-<textarea id="cv" placeholder="Pega tu CV"></textarea>
-<small>Puedes escribir tu experiencia aunque no tengas CV.</small>
+<textarea id="cv" placeholder="O pega tu CV aquí..."></textarea>
+<small>Puedes pegar tu CV completo o simplemente contar tu experiencia. No tiene que estar perfecto — lo analizamos como un reclutador real.</small>
 
-<textarea id="job" placeholder="Vacante"></textarea>
-<small>Copia la vacante real.</small>
+<textarea id="job" placeholder="Pega la vacante..."></textarea>
+<small>Copia la descripción del puesto al que quieres aplicar.</small>
 
 <div class="row">
-<input id="impact" placeholder="Impacto">
-<input id="role" placeholder="Rol">
+  <div>
+    <input id="impact" placeholder="Impacto">
+    <small>Ej: apoyé a más de 120 personas, mejoré procesos o ejecuté actividades.</small>
+  </div>
+  <div>
+    <input id="role" placeholder="Rol">
+    <small>Ej: coordinación, implementación, apoyo operativo o liderazgo.</small>
+  </div>
 </div>
 
 <input id="tools" placeholder="Herramientas">
+<small>Ej: Excel, reportes, monitoreo, trabajo comunitario.</small>
 
 <button onclick="run()">Analizar mi aplicación</button>
 
@@ -126,13 +169,14 @@ async function run(){
 
   console.log("LENGTH CV:", cvText.length);
 
+  // ✅ FIX REAL AQUÍ
   if(cvText.trim().length < 80){
     result.innerHTML = `
       <div class="result">
-        <b>Cuéntanos un poco más</b>
+        <b>Cuéntanos un poco más sobre tu experiencia</b><br><br>
         <ul>
-          <li>¿Qué hacías?</li>
-          <li>¿Resultados?</li>
+          <li>¿Qué hacías exactamente?</li>
+          <li>¿Qué resultados lograste?</li>
           <li>¿Con quién trabajabas?</li>
         </ul>
       </div>
@@ -156,23 +200,38 @@ async function run(){
     });
 
     const text = await res.text();
-
     console.log("RAW RESPONSE:", text);
 
     const data = JSON.parse(text);
 
     result.innerHTML = `
       <div class="result">
-        <h3>Score: ${data.score}</h3>
-        <p>${data.diagnostico}</p>
+        <div class="score-circle" style="background:#4f46e5">
+          ${data.score}
+        </div>
+
+        <h3>${data.nivel}</h3>
+
+        <p><b>Diagnóstico:</b><br>${data.diagnostico}</p>
+
+        <p><b>Errores:</b><br>${data.errores_criticos.join("<br>")}</p>
+
+        <p><b>Mejora:</b><br>
+        <b>Antes:</b> ${data.mejora_ejemplo.antes}<br>
+        <b>Después:</b> ${data.mejora_ejemplo.despues}
+        </p>
+
+        <div style="margin-top:20px;background:#fff3cd;padding:15px;border-radius:10px;">
+          <button>Desbloquear CV optimizado – $1</button>
+        </div>
+
       </div>
     `;
 
-  } catch(e){
+  }catch(e){
     result.innerHTML = `<div class="result">Error: ${e.message}</div>`;
   }
 }
-
 </script>
 
 </body>
